@@ -17,5 +17,8 @@
 - 克隆仓库并验证提交历史
 
 ## 文件说明
+
+本文件位于仓库的 `task1/` 目录，以下路径均相对于此目录。周练习目录与编译示例见[仓库根目录 README](../README.md)。
+
 - commands.md：终端命令笔记
 - terminal_practice/note.txt：文件操作练习
