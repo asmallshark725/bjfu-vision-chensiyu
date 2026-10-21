@@ -1,3 +1,5 @@
+#include <iostream>
+
 void sayHi() {                       // ← 定义：写下菜谱
     std::cout << "hi" << std::endl;
 }
