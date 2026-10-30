@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debdg day4",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/week3/build/day4",
+            "cwd": "${workspaceFolder}/week3",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "externalConsole": false
+        }
+    ]
+}
