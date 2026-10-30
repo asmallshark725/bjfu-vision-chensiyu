@@ -5,3 +5,5 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(day1 main.cpp src/add.cpp)
 target_include_directories(day1 PRIVATE include)
+
+add_executable(day4 day4.cpp)
