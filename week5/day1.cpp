@@ -1,7 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 int main(){
-    cv::Mat image = cv::imread("images/images.jpg", cv::IMREAD_COLOR);
+    cv::Mat image = cv::imread("images/test.jpg", cv::IMREAD_COLOR);
     if (image.empty()) {
     std::cout << "图片读取失败" << std::endl;
     return 1;
