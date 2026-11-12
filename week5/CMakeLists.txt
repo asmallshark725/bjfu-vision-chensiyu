@@ -10,3 +10,7 @@ target_link_libraries(day1 PRIVATE ${OpenCV_LIBS})
 add_executable(day2 day2.cpp)
 target_include_directories(day2 PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(day2 PRIVATE ${OpenCV_LIBS})
+
+add_executable(day3 day3.cpp)
+target_include_directories(day3 PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(day3 PRIVATE ${OpenCV_LIBS})
