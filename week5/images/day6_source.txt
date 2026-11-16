@@ -1,0 +1,4 @@
+Day6 练习图片：day6_blue.jpg
+来源：https://github.com/rzhu98-hub/RM_AutoAim/blob/main/armor_detection_py/selected_armor_img/413.jpg
+下载日期：2026-11-16
+保留下载文件原样，无裁剪或标注修改。公开仓库素材仅作为本地学习参考，公开再分发前需核对授权。
