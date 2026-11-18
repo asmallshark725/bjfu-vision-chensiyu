@@ -31,3 +31,16 @@ target_include_directories(day6 PRIVATE
     ../task3/include
 )
 target_link_libraries(day6 PRIVATE ${OpenCV_LIBS})
+
+add_executable(day7
+    day7.cpp
+    ../task3/src/light.cpp
+    ../task3/src/armor.cpp
+)
+
+target_include_directories(day7 PRIVATE
+    ${OpenCV_INCLUDE_DIRS}
+    ../task3/include
+)
+
+target_link_libraries(day7 PRIVATE ${OpenCV_LIBS})
