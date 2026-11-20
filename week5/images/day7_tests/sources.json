@@ -1,0 +1,26 @@
+[
+  {
+    "file": "01_blue3.jpg",
+    "description": "蓝色3号目标,目标比原测试图小,另有侧面灯光。",
+    "source": "https://github.com/rzhu98-hub/RM_AutoAim/blob/main/armor_detection_py/selected_armor_img/193.jpg",
+    "downloaded": "2026-11-18",
+    "sha256": "6ae01cc5fa6d48272595219214a7ebf99f1476bfb913d067495591327bb53167",
+    "modified": false
+  },
+  {
+    "file": "02_multi.jpg",
+    "description": "红蓝目标同框，含侧面装甲板及多处亮光，用于观察跨目标误配。",
+    "source": "https://github.com/rzhu98-hub/RM_AutoAim/blob/main/armor_detection_py/selected_armor_img/429.jpg",
+    "downloaded": "2026-11-18",
+    "sha256": "d1971c2eb803e63deb9b057222aaf23fea896d3840678918a2f5cb3dfc232560",
+    "modified": false
+  },
+  {
+    "file": "03_dark.jpg",
+    "description": "暗场蓝色目标，含明显长条灯光与亮斑干扰；保留下载原图。",
+    "source": "https://github.com/rzhu98-hub/RM_AutoAim/blob/main/armor_detection_py/selected_armor_img/far_001.jpg",
+    "downloaded": "2026-11-18",
+    "sha256": "2e9bc6d449b6eaa9a089a1f692bf82590cb5431b57b9d1c280e51ed8d95afd62",
+    "modified": false
+  }
+]

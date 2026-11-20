@@ -1,5 +1,8 @@
 #include"light.hpp"
 #include<iostream>
+        double Light::getLength() const {
+            return length;
+        }
         double Light::aspectRatio() const {
             return length / width;
         }
@@ -28,3 +31,11 @@
         Light::~Light(){
             
         }
+
+std::string Light::getColor() const {
+    return color;
+}
+
+void Light::setColor(const std::string& value) {
+    color = value;
+}
