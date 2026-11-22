@@ -1,0 +1,62 @@
+[
+  {
+    "source_id": "ansidd",
+    "url": "https://github.com/ansidd/RMPlateDetection",
+    "revision": "ad6cb4db544cd320a440e519abccaf25132fbe0e",
+    "images": 25,
+    "license": "not_specified_for_images",
+    "annotation_type": "upstream_yolo_bbox",
+    "attribution": "ansidd/RMPlateDetection",
+    "notes": "Original files retained; dataset image license not specified in the inspected repository"
+  },
+  {
+    "source_id": "qdu_damo",
+    "url": "https://huggingface.co/datasets/rmcv/armor",
+    "revision": "b1ea191eb475102b31e6890db46a210c8c2982d0",
+    "images": 8,
+    "license": "CC-BY-4.0",
+    "annotation_type": "model",
+    "attribution": "青岛大学 / rmcv",
+    "notes": "Source-provided automatic labels; role=ignore objects retained"
+  },
+  {
+    "source_id": "qdu_gimbal_0507",
+    "url": "https://huggingface.co/datasets/rmcv/armor",
+    "revision": "b1ea191eb475102b31e6890db46a210c8c2982d0",
+    "images": 4,
+    "license": "CC-BY-4.0",
+    "annotation_type": "model",
+    "attribution": "青岛大学 / rmcv",
+    "notes": "Source-provided automatic labels; role=ignore objects retained"
+  },
+  {
+    "source_id": "qdu_gimbal_0509",
+    "url": "https://huggingface.co/datasets/rmcv/armor",
+    "revision": "b1ea191eb475102b31e6890db46a210c8c2982d0",
+    "images": 2,
+    "license": "CC-BY-4.0",
+    "annotation_type": "model",
+    "attribution": "青岛大学 / rmcv",
+    "notes": "Source-provided automatic labels; role=ignore objects retained"
+  },
+  {
+    "source_id": "rzhu",
+    "url": "https://github.com/rzhu98-hub/RM_AutoAim",
+    "revision": "cf5eaec745cce301a9764603dbea598ef0dc7f32",
+    "images": 7,
+    "license": "not_specified_for_images",
+    "annotation_type": "none",
+    "attribution": "rzhu98-hub/RM_AutoAim",
+    "notes": "Original files retained; dataset image license not specified in the inspected repository"
+  },
+  {
+    "source_id": "ynurmod",
+    "url": "https://github.com/houhongyi/RM-DATASET",
+    "revision": "2b15adad6990d60db1d2521fa2822384cdeb15ec",
+    "images": 12,
+    "license": "not_specified_for_images",
+    "annotation_type": "none",
+    "attribution": "houhongyi/RM-DATASET",
+    "notes": "Original files retained; dataset image license not specified in the inspected repository"
+  }
+]
