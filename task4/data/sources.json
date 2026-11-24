@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/TongjiSuperPower/sp_vision_tutorial_26",
+  "commit": "2bb6179ef9900bd1e5e815c287994d7357e62fe4",
+  "video": {
+    "path": "video.avi",
+    "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/video.avi",
+    "sha256": "70d04ce4a73197ee1d5e0e771c148f8f883866bc8a3a9dee86125dffde06533b",
+    "bytes": 54947194,
+    "size": [
+      1280,
+      1024
+    ],
+    "fps": 30,
+    "frames": 752
+  },
+  "calibration_reference": {
+    "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/src/main.cpp",
+    "sha256": "360aac141b4fd4dc827e424c4e573b89842c365e276d502bb1c38d64b3c538ff",
+    "local_derived_file": "../config/camera.yml",
+    "scope": "Course sample reproduction, not a newly performed calibration or independent distance-accuracy validation."
+  },
+  "license": {
+    "path": "LICENSE",
+    "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/LICENSE",
+    "sha256": "85a0553e89df1d1605cd2b5f14bdcdeab322f727b43cdead4a1446ce46dd2b4f"
+  }
+}

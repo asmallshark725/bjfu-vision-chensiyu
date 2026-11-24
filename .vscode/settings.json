@@ -1,4 +1,11 @@
 {
-     "cmake.sourceDirectory": "${workspaceFolder}/week5",
-    "C_Cpp.default.compileCommands": "${workspaceFolder}/week5/build/compile_commands.json"
+  "cmake.sourceDirectory": "${workspaceFolder}/task4",
+  "C_Cpp.default.compileCommands": [
+    "${workspaceFolder}/week5/build/compile_commands.json",
+    "${workspaceFolder}/week6/build/compile_commands.json",
+    "${workspaceFolder}/task4/build/compile_commands.json"
+  ],
+  "editor.inlineSuggest.enabled": false,
+  "github.copilot.nextEditSuggestions.enabled": false,
+  "cmake.buildDirectory": "${workspaceFolder}/task4/build"
 }

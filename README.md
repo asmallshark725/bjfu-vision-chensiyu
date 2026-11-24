@@ -9,6 +9,11 @@
 - `week1/`：第一周源码及本地编译的可执行文件。
 - `week2/`：第二周练习，目前包含 `day8.cpp`；后续 `day9.cpp` 也放在此目录。
 - `task1/`：Ubuntu 与 Git 练习，说明见 [task1/README.md](task1/README.md)。
+- `task2/`：C++ 多文件与 CMake 练习，说明见 [task2/README.md](task2/README.md)。
+- `task3/`：Light、Armor、Detector 类与多态练习，说明见 [task3/README.md](task3/README.md)。
+- `week5/`：OpenCV 图片处理、灯条筛选与红蓝配对，说明见 [week5/README.md](week5/README.md)。
+- `week6/`：自主编写的视频初版，说明见 [week6/README.md](week6/README.md)。
+- `task4/`：当前正式任务入口，传统装甲板检测、PnP 测距和效果展示，见 [task4/README.md](task4/README.md)。
 
 ## 已练习内容
 
@@ -17,6 +22,8 @@
 - 质数判断与猜数字游戏
 - 函数、返回值、引用参数与默认参数
 - Git 基础操作
+- OpenCV 图像、掩膜、轮廓、灯条几何筛选与配对
+- 视频逐帧处理、读取课程相机内参、solvePnP 与距离显示（学习整理见 Task4）
 
 ## 开发环境
 
@@ -38,5 +45,5 @@ g++ -std=c++17 -o week2/day8 week2/day8.cpp
 ./week2/day8
 ```
 
-每个 .cpp 文件独立编译运行；可执行文件放在对应周目录，并由根目录 .gitignore 忽略。
+早期单文件练习可独立编译；task2、task3、week5、week6 和 task4 按各自 README 使用 CMake 构建。构建目录由根目录 .gitignore 忽略。
 第一周结业自测：已完成。
