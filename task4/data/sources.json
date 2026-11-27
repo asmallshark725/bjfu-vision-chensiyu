@@ -2,26 +2,52 @@
   "repository": "https://github.com/TongjiSuperPower/sp_vision_tutorial_26",
   "commit": "2bb6179ef9900bd1e5e815c287994d7357e62fe4",
   "video": {
-    "path": "video.avi",
+    "repository_path": "lecture4/class/video.avi",
     "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/video.avi",
     "sha256": "70d04ce4a73197ee1d5e0e771c148f8f883866bc8a3a9dee86125dffde06533b",
     "bytes": 54947194,
-    "size": [
-      1280,
-      1024
-    ],
+    "width": 1280,
+    "height": 1024,
     "fps": 30,
     "frames": 752
   },
-  "calibration_reference": {
-    "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/src/main.cpp",
-    "sha256": "360aac141b4fd4dc827e424c4e573b89842c365e276d502bb1c38d64b3c538ff",
-    "local_derived_file": "../config/camera.yml",
-    "scope": "Course sample reproduction, not a newly performed calibration or independent distance-accuracy validation."
+  "calibration": {
+    "repository_path": "lecture4/class/src/main.cpp",
+    "url": "https://github.com/TongjiSuperPower/sp_vision_tutorial_26/blob/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/src/main.cpp",
+    "camera_matrix": [
+      [
+        1286.307063384126,
+        0,
+        645.3445081915526
+      ],
+      [
+        0,
+        1288.140073656244,
+        483.6163720308021
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "distortion_order": [
+      "k1",
+      "k2",
+      "p1",
+      "p2",
+      "k3"
+    ],
+    "distortion_coefficients": [
+      -0.47562935060124745,
+      0.2183174582961731,
+      0.0004957613589406044,
+      -0.0003461776954869359,
+      0
+    ],
+    "armor_width_m": 0.135,
+    "light_length_m": 0.056,
+    "scope": "Only the matching course sample and original image geometry."
   },
-  "license": {
-    "path": "LICENSE",
-    "url": "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/LICENSE",
-    "sha256": "85a0553e89df1d1605cd2b5f14bdcdeab322f727b43cdead4a1446ce46dd2b4f"
-  }
+  "license": "MIT; original license text is included in LICENSE"
 }

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-27",
+  "environment": "WSL Ubuntu 22.04; g++ 11.4.0; CMake 3.22.1; OpenCV 4.5.4; Release build",
+  "build_passed": true,
+  "source_sha256": "5c34b03fd7c83fd8815ed7e2cb2c8c4d402008f929e8eff58576773026f784fd",
+  "week6_source_sha256": "52b66fa25e00f1f8364b809413230f1bb38187505ef4d99b83c3862ebe78b278",
+  "default_color": "Red",
+  "brightness": 200,
+  "color_difference": 50,
+  "processing_body_matches_week6_after_formatting": true,
+  "original_video_sha256": "70d04ce4a73197ee1d5e0e771c148f8f883866bc8a3a9dee86125dffde06533b",
+  "original_frames": 752,
+  "frames_with_armor_candidate": 729,
+  "frames_with_positive_depth_pnp": 729,
+  "frames_with_multiple_candidates": 0,
+  "mean_of_four_endpoint_mean_reprojection_errors_px": 2.93518,
+  "method": "Isolated exporter using the submitted processing body. GUI and waiting disabled; startup slider values fixed. Annotated frames recorded without changing detection or PnP calculations.",
+  "limitations": "Candidate frequency is not accuracy/recall; no real-distance ground truth; timing in this export excludes GUI updates and is not presented as a live GUI benchmark.",
+  "demonstration": {
+    "seconds": 30,
+    "mp4_frames": 900,
+    "mp4_fps": 30,
+    "gif_frames": 150,
+    "gif_fps": 5,
+    "composition": "752 original frames followed by 148 explicitly REPLAY-labeled frames from the beginning.",
+    "mp4_sha256": "7b6548507144093352323164648a8c280ae344d87dcf5a3e3658cdaf29249547",
+    "gif_sha256": "9a4b678d191592ccde7e370ee863c993f50f37646d1b99e37a25a7daea3eff8c",
+    "codec": "H.264, yuv420p, faststart",
+    "gif_width": 400
+  }
+}

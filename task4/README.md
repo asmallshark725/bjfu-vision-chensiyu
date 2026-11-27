@@ -1,120 +1,128 @@
 # Task4：Hello Armor
 
-沿用 Week5 / Week6 的传统 OpenCV 灯条方案，完成视频装甲板配对、角点提取和 PnP 测距。复用任务三的 `Light` 与 `Armor` 类，用 CMake 构建。
+使用传统 OpenCV 完成视频逐帧灯条检测、红蓝颜色判断、装甲板配对、四端点提取和 PnP 测距。程序保留单文件处理流程，复用任务三的 `Light` 和 `Armor` 类。
 
-本次按学习者确认，使用同济 SP 26 培训仓库的配套视频、相机内参和物理尺寸。素材是实验室手持红色 2 号装甲板的课程样例，不是实战比赛录像。下面的结果只描述这段样例。
+## 文件结构
 
-## 编译与运行
+```text
+task4/
+├── CMakeLists.txt
+├── video_read.cpp          读取、检测、配对、PnP、绘图和计时
+├── data/
+│   ├── README.md           原视频获取方法
+│   ├── sources.json        素材与标定参数来源
+│   └── LICENSE             原素材仓库许可证
+└── results/                当前程序生成的演示、截图和检查记录
+```
 
-依赖：Ubuntu、C++17 编译器、CMake 3.16+、OpenCV 4。Python 3 仅用于下载/校验素材，不参与检测。
+`Light`、`Armor` 的头文件与实现继续使用仓库中的 `task3/include/` 和 `task3/src/`。因此需要保留整个培训仓库的目录结构。Week5、Week6 保存学习练习，Task4 是本次任务提交入口。
 
-从仓库根目录执行：
+## 环境与编译
+
+依赖：C++17 编译器、CMake 3.16 及以上、OpenCV 4。检查环境为 WSL Ubuntu 22.04、g++ 11.4.0、CMake 3.22.1、OpenCV 4.5.4。
+
+以下命令在仓库根目录运行：
 
 ```bash
-python3 task4/scripts/fetch_course_data.py
 cmake -S task4 -B task4/build -DCMAKE_BUILD_TYPE=Release
 cmake --build task4/build --parallel 2
-./task4/build/hello_armor
+./task4/build/video_read /mnt/e/robomaster/school_training/hello_armor/video.avi
 ```
 
-素材脚本从固定版本的公开仓库下载视频并核对 SHA-256；当前电脑已有的相同素材也可直接复用。原视频约 55 MB，由 `.gitignore` 排除，换电脑后执行下载命令即可恢复。
+程序启动后，在终端输入 `Red` 或 `Blue`。课程样例中为红色装甲板，使用 `Red` 观察结果。窗口中的两个滑条分别调节亮芯阈值和红蓝色差阈值，按 `Esc` 退出。
 
-画面显示四角点、装甲板框、中心点和距离；按 `Esc` 或 `q` 退出。终端默认每 30 帧打印该帧的处理耗时，结束后输出汇总；不打印候选轮廓和灯条列表。
+程序支持在命令后指定一个视频路径；无参数时沿用本机 E 盘课程视频。换电脑时，可以先获取同一原视频：
 
-## 文件与学习入口
+```bash
+curl --fail --location "https://raw.githubusercontent.com/TongjiSuperPower/sp_vision_tutorial_26/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/video.avi" --output task4/data/video.avi
+./task4/build/video_read task4/data/video.avi
+```
 
-| 文件 | 作用 |
+原视频约 55 MB，由 `.gitignore` 排除；视频本身不放入 Git，下载位置和校验值见 [素材说明](data/README.md)。原视频的标定参数已保存在源码中。使用其他相机或经过缩放、裁剪的视频时，需要匹配的标定参数和物理尺寸。
+
+## 处理流程
+
+1. `VideoCapture` 逐帧读取，帧内候选重新创建。
+2. `split`、`subtract`、`inRange` 生成红蓝色差掩膜和亮芯掩膜。
+3. `findContours` 提取轮廓，通过面积、旋转矩形长宽比、倾角筛选灯条。
+4. 在随灯条旋转的采样区域内判断红蓝颜色：短边扩大 3 倍、长边扩大 1.1 倍，生成局部多边形掩膜，再用 `bitwise_and` 限制红蓝像素统计范围。
+5. 合格灯条保存为 `Light`，两两检查颜色、角度差、长度相似度、沿灯条的错位和横向间距，构造 `Armor`。
+6. 根据两灯条中心、方向和长度，获得按左上、右上、右下、左下排列的四个端点。
+7. `solvePnP` 使用四组对应点、相机内参与畸变系数求位置和朝向；画面显示 `norm(tvec)` 得到的米制直线距离。
+8. `projectPoints` 把模型点投回图像，用黄色圆圈和检测端点比较；首次成功解算时打印四点平均重投影偏差。
+9. 用 `getTickCount`、`getTickFrequency` 输出每帧处理耗时。
+
+## 主要参数
+
+| 参数 | 当前值与含义 |
 | --- | --- |
-| `main.cpp` | 读取参数，循环读帧，依次调用检测、解算和绘图，处理显示/保存。先从这里读。 |
-| `include/armor_detector.hpp` | 筛选参数，以及灯条、装甲板检测结果的定义。 |
-| `src/armor_detector.cpp` | `findLights` 找灯条，`identifyColor` 判断局部颜色，`matchLights` 配对。 |
-| `include/pnp_solver.hpp`、`src/pnp_solver.cpp` | 读取标定配置，通过四组 3D-2D 对应点计算位置与距离。 |
-| `config/camera.yml` | 相机内参、畸变参数、标定分辨率与装甲板物理尺寸。 |
-| `tests/checks.cpp` | 检查旋转配对、颜色筛选、唯一配对、已知 PnP 位姿和异常角点。 |
-| `data/` | 素材来源、许可证；下载的原视频也放这里。 |
-| `results/` | 30 秒效果展示、截图、逐帧测量和验证说明。 |
-| `docs/learning.md` | 知识点解释、与现有代码的对应关系、这次改动说明。 |
+| 最低亮度 | 默认 200；B、G、R 三个通道都达到门槛才属于亮芯 |
+| 红蓝色差 | 默认 50；红比蓝、或蓝比红大于此值 |
+| 最小轮廓面积 | 25 像素面积 |
+| 灯条长宽比 | 2～15 |
+| 灯条偏离竖直方向的倾角 | 不超过 60° |
+| 两灯条角度差 | 不超过 22° |
+| 短灯条长度 / 长灯条长度 | 不小于 0.6 |
+| 沿灯条错位 / 横向间距 | 不超过 0.4 |
+| 横向间距 / 平均灯长 | 1～4 |
+| 红蓝颜色比例 | 有效色像素不少于 5 个；某颜色占比至少 60% |
 
-`build/hello_armor` 是最终运行程序；`build/task4_checks` 是检查程序；`build/libtask4_vision.a` 是构建时生成的公共代码静态库。`build/` 全部是自动生成的文件，不提交进仓库。
+当前保留了闭运算的学习代码，但未启用。配对分数有计算，尚未用它进行候选排序和冲突选择。颜色判断使用已有色差掩膜与旋转采样区域，没有额外引入主色通道亮度门槛。
 
-## 学校任务对应
+## 相机参数与距离
 
-| 要求 | 实现与证据 |
-| --- | --- |
-| OpenCV 4、读图、二值化滑条练习 | 保留在 [Week5](../week5/README.md)，其中 [Day7](../week5/src/day7.cpp) 可独立运行。 |
-| 轮廓、外接矩形与灯条筛选，使用 Light | `ArmorDetector::findLights`，复用 `task3/include/light.hpp`。 |
-| 灯条配对成 Armor，视频逐帧画框 | `matchLights` 和 `main.cpp`，每帧创建新的检测结果。 |
-| 四个角点 solvePnP，画面显示距离 | `PnPSolver::solve`，有效解显示米制距离，失败时明确显示不可用。 |
-| 30 秒效果视频或 GIF，放进 README | 下方视频及 GIF；原片尾部循环部分已在画面中注明。 |
-| 大部分帧框中，终端输出单帧处理时间 | 原片 743/752 帧有检测结果，739 帧有有效 PnP；逐帧记录及耗时见 `results/`。 |
+相机内参、畸变系数和物理尺寸均来自同济课程同一示例：
 
-## 效果
+- 原视频：1280×1024，30 FPS，752 帧，约 25.0667 秒。
+- 两灯条中心线间距：0.135 米；灯条长度：0.056 米。
+- 模型原点位于装甲板模型中心；四点顺序与图像端点顺序一致。
+- `tvec` 的 Z 分量是前向深度；`norm(tvec)` 是相机光心到模型中心的直线距离。
+- 黄色重投影圈用于检查图像吻合程度。当前打印的是四点欧氏偏差的平均值，单位为像素；低重投影偏差不能单独证明真实距离精度。
 
-[打开完整 30 秒 MP4](results/demo_30s.mp4)
+完整参数直接保存在 `video_read.cpp` 的视频循环之前，来源见 [sources.json](data/sources.json)。
 
-![30 秒检测与测距展示](results/demo_30s.gif)
+## 耗时统计
 
-![倾斜装甲板检测与距离](results/rotated_frame.jpg)
+终端逐帧输出 `Frame processing: ... ms`。计时从生成掩膜前开始，到本帧检测、PnP 和标注完成时结束，包含代码中间的掩膜窗口更新；不包含读帧、最终视频窗口更新、`waitKey(33)` 等待及随后打印耗时本身的开销。
 
-原片为 1280×1024、30 FPS、752 帧（25.0667 秒）。展示视频先播放完整原片，再播放开头 148 帧，合计 900 帧、30 秒。第二遍显示 `REPLAY`，没有将重复播放计入原片验证数据。
+该数值用于观察处理开销，不等于整套程序的播放帧率。首次成功求解的深度、距离和重投影偏差只打印一次。
 
-完整原片检测记录（默认红色，亮度 150、色差 50）：
+## 效果演示与检查
 
-| 项目 | 结果 |
+[播放当前版本的 30 秒 MP4](results/demo_30s.mp4)
+
+![当前程序的 30 秒效果预览](results/demo_30s.gif)
+
+![当前程序首帧检测、端点和距离](results/first_frame.jpg)
+
+![当前程序倾斜场景](results/tilted_frame.jpg)
+
+演示使用本次提交的检测流程生成：先播放完整的 752 帧，再以 `REPLAY` 标记重播开头 148 帧，共 900 帧、30 秒。重复部分只用于演示，不计入原片检查数据。演示生成时关闭交互窗口并使用默认红色参数。
+
+本次检查使用当前默认参数（红色、亮度 200、色差 50）：
+
+| 检查项 | 结果 |
 | --- | ---: |
-| 解码帧数 | 752 |
-| 有装甲板框的帧数 | 743 |
-| 有有效 PnP 距离的帧数 | 739 |
-| 同一帧出现多个框的帧数 | 0 |
-| 检测与 PnP 平均耗时 | 约 1.62 ms/帧 |
+| 原视频处理帧数 | 752 |
+| 有装甲板候选的帧数 | 729 |
+| 有正深度 PnP 结果的帧数 | 729 |
+| 同帧有多组候选的帧数 | 0 |
+| 已求解候选四点平均重投影偏差的均值 | 2.94 像素 |
 
-这些计数表示检测输出频次，不等于准确率。已抽查不同距离和倾斜角度的画面，详细记录见 [验证说明](results/validation.md)。耗时不包括读帧、绘图、视频编码和窗口等待，也不代表整套程序的实时帧率。没有真实测距标注，不能由这些数据声称厘米级精度。
+检查以关闭窗口和等待的导出副本处理完整原视频，检测、采样、配对与 PnP 运算沿用提交版本。以上计数表示候选和正深度解的出现次数，不等于人工标注的准确率或召回率。逐帧记录见 [frame_results.csv](results/frame_results.csv)，环境、源文件校验值和媒体检查见 [verification.json](results/verification.json)。
 
-## 参数与调试
+导出副本中的耗时不包含交互窗口更新，因此此表不把导出耗时当作原程序的窗口运行性能。原程序仍在终端逐帧输出自身的计时结果。
 
-```bash
-# 显示亮度掩膜和两个调参滑条；颜色统计也使用当前亮度与色差门槛。
-./task4/build/hello_armor --tune=true
+## 当前局限
 
-# 只检测蓝色，或使用其他阈值。
-./task4/build/hello_armor --color=Blue --brightness=150 --difference=50
-
-# 每帧打印处理耗时。
-./task4/build/hello_armor --log-every=1
-
-# 不弹窗，处理整个原片并保存结果；输出文件已存在时会拒绝覆盖。
-./task4/build/hello_armor --headless=true --output=/tmp/task4_result.mp4 --csv=/tmp/task4_frames.csv
-
-# 使用配套标定文件测试自己的同分辨率视频。
-./task4/build/hello_armor /path/to/video.avi --camera=/path/to/camera.yml
-
-# 从头循环，生成 30 秒展示。程序输出 mp4v 编码 MP4，可在本地播放器观看。
-./task4/build/hello_armor --headless=true --seconds=30 --repeat=true --output=/tmp/task4_demo.mp4
-```
-
-提交的展示 MP4 已另行转为 H.264，以便网页播放。GIF 为同一段 30 秒展示的 440×352、5 FPS 预览；完整 MP4 保留 30 FPS。转换工具不属于检测程序的依赖。
-
-## 相机与距离约定
-
-`camera.yml` 的数值来自同一课程例程：标定分辨率 1280×1024、两灯条中心线间距 0.135 m、灯条长度 0.056 m。本项目使用统一的小装甲板尺寸；换大装甲板时需修改尺寸，大小装甲板混用则还需增加类型判断。
-
-四角顺序固定为 **左上、右上、右下、左下**。图像点取自两根灯条长边中心线的端点，物体点为相同顺序的 `±宽度/2、±灯长/2、0`。
-
-`solvePnP` 输出旋转向量 `rvec` 与平移向量 `tvec`。相机坐标 X 向右、Y 向下、Z 向前；画面显示 `sqrt(tx² + ty² + tz²)`，表示相机光心到装甲板中心的直线距离，单位米，`tz` 则单独表示前向深度。
-
-仅接受有限数值、正 Z、四角重投影均方根误差不超过 5 像素的解。输入图像尺寸与标定尺寸不一致时会报错，避免静默套用错误内参。低重投影误差本身不能证明标定或物理尺寸正确。
-
-## 检查
-
-```bash
-ctest --test-dir task4/build --output-on-failure
-```
-
-目前保留传统规则法：强遮挡、严重模糊、近邻同色装甲板和极端透视仍可能漏检或错配。后续收到新的比赛素材时，需要用对应标定重新验证。
+- 素材是室内手持装甲板的课程示例，尚不能代表多种比赛场景。
+- 无真实距离标注，尚未进行独立的实物测距精度验证。
+- 阈值针对当前素材调试，强反光、模糊、遮挡、相邻同色目标仍可能产生漏检或误配。
+- 使用固定小装甲板尺寸；当前未进行大小装甲板分类和跨帧滤波预测。
 
 ## 来源
 
-- 学校培养任务书第 3.2 节：Hello Armor。
-- [同济 SP 26 培训仓库](https://github.com/TongjiSuperPower/sp_vision_tutorial_26)，固定版本 `2bb6179ef9900bd1e5e815c287994d7357e62fe4`。
-- [课程原视频](https://github.com/TongjiSuperPower/sp_vision_tutorial_26/blob/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/video.avi)及[相机参数与物理尺寸参考](https://github.com/TongjiSuperPower/sp_vision_tutorial_26/blob/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/src/main.cpp)。许可证保存在 `data/LICENSE`，校验值见 `data/sources.json`。
-- [OpenCV：轮廓与形状描述](https://docs.opencv.org/4.5.4/d3/dc0/group__imgproc__shape.html)、[形态学](https://docs.opencv.org/4.5.4/d9/d61/tutorial_py_morphological_ops.html)、[PnP](https://docs.opencv.org/4.x/d5/d1f/calib3d_solvePnP.html)。
+- 同济 SP 26 培训仓库，固定版本 `2bb6179ef9900bd1e5e815c287994d7357e62fe4`。
+- [课程原视频](https://github.com/TongjiSuperPower/sp_vision_tutorial_26/blob/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/video.avi)。
+- [课程相机参数与物理尺寸](https://github.com/TongjiSuperPower/sp_vision_tutorial_26/blob/2bb6179ef9900bd1e5e815c287994d7357e62fe4/lecture4/class/src/main.cpp)。
+- 原素材仓库的 MIT 许可证保存在 [data/LICENSE](data/LICENSE)。

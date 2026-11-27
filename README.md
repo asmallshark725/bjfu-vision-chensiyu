@@ -12,8 +12,8 @@
 - `task2/`：C++ 多文件与 CMake 练习，说明见 [task2/README.md](task2/README.md)。
 - `task3/`：Light、Armor、Detector 类与多态练习，说明见 [task3/README.md](task3/README.md)。
 - `week5/`：OpenCV 图片处理、灯条筛选与红蓝配对，说明见 [week5/README.md](week5/README.md)。
-- `week6/`：自主编写的视频初版，说明见 [week6/README.md](week6/README.md)。
-- `task4/`：当前正式任务入口，传统装甲板检测、PnP 测距和效果展示，见 [task4/README.md](task4/README.md)。
+- `week6/`：视频检测与 PnP 的逐步学习源码，说明见 [week6/README.md](week6/README.md)。
+- `task4/`：本次任务提交入口，沿用现有架构完成检测、PnP、旋转颜色采样与耗时统计，见 [task4/README.md](task4/README.md)。
 
 ## 已练习内容
 
@@ -23,7 +23,8 @@
 - 函数、返回值、引用参数与默认参数
 - Git 基础操作
 - OpenCV 图像、掩膜、轮廓、灯条几何筛选与配对
-- 视频逐帧处理、读取课程相机内参、solvePnP 与距离显示（学习整理见 Task4）
+- 视频逐帧读取、阈值调节、旋转区域颜色采样和检测结果显示
+- 四点 PnP、深度与距离、重投影偏差和单帧耗时统计
 
 ## 开发环境
 
